@@ -38,6 +38,3 @@
 #+end_src
 
 
-
-* 参考资料
- - github.com/0xsequence/ethkit
