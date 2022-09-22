@@ -1,17 +1,18 @@
-package wallet
+#+TITLE:     README
+#+AUTHOR:    rzry https://github.com/laukkw
+#+EMAIL:     rzry36008@ccie.lol
+#+DATE:      2022-09-22
+#+LANGUAGE:  en
+* 项目介绍
+- 针对类ETH链的go工具包
 
-import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/laukkw/laukit/client"
-	"github.com/laukkw/laukit/pkg"
-	"github.com/laukkw/laukit/test/erc20"
-	"math/big"
-	"testing"
-)
+* 使用方式
+#+begin_src shell
+  go get github.com/laukkw/laukit
+#+end_src
 
-func TestInterface(t *testing.T) {
-	var bsc = []string{"https://data-seed-prebsc-1-s2.binance.org:8545",
+#+begin_src go
+  	var bsc = []string{"https://data-seed-prebsc-1-s2.binance.org:8545",
 		"https://bsc-dataseed1.ninicoin.io"}
 
 	p, err := client.NewProvider(bsc, true)
@@ -34,5 +35,9 @@ func TestInterface(t *testing.T) {
 		return ercInstance.Approve(auth, common.HexToAddress("0x4Ac19Ef38DB893a9128a49C654680A5DdC3F8202"), big.NewInt(1000000000000000))
 	}, auth)
 	t.Log(tx.Hash())
+#+end_src
 
-}
+
+
+* 参考资料
+ - github.com/0xsequence/ethkit
