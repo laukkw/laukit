@@ -3,8 +3,28 @@ package main
 import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/laukkw/kwstart/errors"
 	"strings"
 )
+
+func AbiDecoder(argTypes []string, input []byte, argValues []interface{}) error {
+	if len(argTypes) != len(argValues) {
+		return errors.New("invalid arguments - types and values do not match")
+	}
+	args, err := buildArgumentsFromTypes(argTypes)
+	if err != nil {
+		return fmt.Errorf("failed to build abi: %v", err)
+	}
+	values, err := args.Unpack(input)
+	if err != nil {
+		return err
+	}
+	if len(args) > 1 {
+		return args.Copy(&argValues, values)
+	} else {
+		return args.Copy(&argValues[0], values)
+	}
+}
 
 func AbiDecodeExprAndStringify(expr string, input []byte) ([]string, error) {
 	argsList := parseArgumentExpr(expr)
