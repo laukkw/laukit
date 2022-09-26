@@ -1,4 +1,4 @@
-package main
+package laukkit
 
 import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
