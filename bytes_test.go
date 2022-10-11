@@ -1,7 +1,8 @@
-package laukkit
+package laukit
 
 import (
 	"encoding/hex"
+	"math/big"
 	"testing"
 )
 
@@ -22,4 +23,7 @@ func TestBytesToBytes32(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Log(BytesToBytes32(addressbyte))
+
+	a := big.NewInt(123141)
+	t.Log(BytesToBytes32(a.Bytes()))
 }

@@ -1,8 +1,9 @@
-package laukkit
+package laukit
 
 import (
 	"encoding/hex"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"strings"
@@ -10,6 +11,7 @@ import (
 
 // BytesToBytes32 将byte32 转换为 bytes32
 func BytesToBytes32(slice []byte) [32]byte {
+	slice = common.LeftPadBytes(slice, 32)
 	var bytes32 [32]byte
 	copy(bytes32[:], slice)
 	return bytes32

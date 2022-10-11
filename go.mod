@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/ethereum/go-ethereum v1.10.25
 	github.com/laukkw/kwstart v1.0.0
+	github.com/shopspring/decimal v1.3.1
 	golang.org/x/net v0.0.0-20220921203646-d300de134e69
 )
 

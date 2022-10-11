@@ -1,10 +1,11 @@
-package laukkit
+package laukit
 
 import (
 	"fmt"
 	"github.com/laukkw/kwstart/errors"
 )
 
+// AbiCoder 将数据按类型 encode 返回bytes
 func AbiCoder(argTypes []string, argValues []interface{}) ([]byte, error) {
 	if len(argTypes) != len(argValues) {
 		return nil, errors.New("invalid arguments - types and values do not match")

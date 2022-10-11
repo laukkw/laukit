@@ -1,4 +1,4 @@
-package laukkit
+package laukit
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// AbiDecoder 将数据按类型解析到 []interface中
 func AbiDecoder(argTypes []string, input []byte, argValues []interface{}) error {
 	if len(argTypes) != len(argValues) {
 		return errors.New("invalid arguments - types and values do not match")
