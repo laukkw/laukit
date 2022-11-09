@@ -282,8 +282,11 @@ func (m *Monitor) addLogs(ctx context.Context, blocks Blocks) {
 		}
 
 		logs, err := m.provider.FilterLogs(tctx, ethereum.FilterQuery{
-			BlockHash: &blockHash,
-			Topics:    topics,
+			FromBlock: block.Number(),
+			ToBlock:   block.Number(),
+			//解决历史区块的black hash err
+			//BlockHash: &blockHash,
+			Topics: topics,
 		})
 
 		if err == nil {
