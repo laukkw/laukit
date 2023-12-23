@@ -55,8 +55,15 @@ func (e *Eauth) NewTransactor(ctx context.Context) (*bind.TransactOpts, error) {
     if err != nil {
         return nil, err
     }
-    auth.GasTipCap = gasPrice
     auth.Nonce = big.NewInt(int64(nonce))
+    tip, err := e.SuggestGasTipCap(ctx)
+    if err != nil {
+        return auth, nil
+    } else {
+        auth.GasTipCap = tip
+        auth.GasFeeCap = auth.GasPrice
+        // auth.GasPrice =
+    }
     return auth, nil
 }
 
@@ -72,17 +79,25 @@ func (e *Eauth) NewTransactorNotPrivateKey(ctx context.Context, from string) (*b
     if err != nil {
         return nil, err
     }
-    nonce, err := e.GetNonce(ctx)
+    nonce, err := e.PendingNonceAt(ctx, common.HexToAddress(from))
     if err != nil {
         return nil, err
     }
     resp := &bind.TransactOpts{
-        From:      common.HexToAddress(from),
-        Nonce:     big.NewInt(0).SetUint64(nonce),
-        GasPrice:  gasPrice,
-        GasTipCap: gasPrice,
-        GasLimit:  0,
-        Context:   ctx,
+        From:     common.HexToAddress(from),
+        Nonce:    big.NewInt(0).SetUint64(nonce),
+        GasPrice: gasPrice,
+        Context:  ctx,
+        NoSend:   false,
+    }
+    tip, err := e.SuggestGasTipCap(ctx)
+    if err != nil {
+        // 获取失败的话就默认
+        return resp, nil
+    } else {
+        resp.GasTipCap = tip
+        resp.GasFeeCap = resp.GasPrice
+        //resp.GasPrice = nil
     }
     return resp, nil
 }

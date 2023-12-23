@@ -113,6 +113,46 @@ func EclNewTransaction(ctx context.Context, ecl *Ecl, req *TransactionReq) (*typ
     return rawTx, nil
 }
 
+func EclNewTransactionNoClient(req *TransactionReq, chainId uint64) (*types.Transaction, error) {
+    to := &req.To
+    var rawTx *types.Transaction
+    if req.GasTip != nil {
+        rawTx = types.NewTx(&types.DynamicFeeTx{
+            ChainID:    big.NewInt(0).SetUint64(chainId),
+            To:         to,
+            Nonce:      req.Nonce.Uint64(),
+            Value:      req.ETHValue,
+            GasFeeCap:  req.GasPrice,
+            GasTipCap:  req.GasTip,
+            Data:       req.Data,
+            Gas:        req.GasLimit,
+            AccessList: req.AccessList,
+        })
+    } else if req.AccessList != nil {
+
+        rawTx = types.NewTx(&types.AccessListTx{
+            ChainID:    big.NewInt(0).SetUint64(chainId),
+            To:         to,
+            Gas:        req.GasLimit,
+            GasPrice:   req.GasPrice,
+            Data:       req.Data,
+            Nonce:      req.Nonce.Uint64(),
+            Value:      req.ETHValue,
+            AccessList: req.AccessList,
+        })
+    } else {
+        rawTx = types.NewTx(&types.LegacyTx{
+            To:       to,
+            Gas:      req.GasLimit,
+            GasPrice: req.GasPrice,
+            Data:     req.Data,
+            Nonce:    req.Nonce.Uint64(),
+            Value:    req.ETHValue,
+        })
+    }
+    return rawTx, nil
+}
+
 func EclSendTransaction(ctx context.Context, ecl *Ecl, signTx *types.Transaction) (*types.Transaction, WaitReceipt, error) {
     if ecl == nil {
         return nil, nil, fmt.Errorf("%s ecl client is nil", errorPath)
